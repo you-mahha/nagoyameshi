@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+
+
+<htm xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>管理者用 ユーザー一覧</title>
+		<link rel="stylesheet" th:href="@{/css/style.css}">
+
+	<body>
+		<div th:replace="fragments/header :: header"></div>
+
+		<div class="admin-container">
+			<h1>ユーザー一覧（管理者用）</h1>
+
+			<form th:action="@{/admin/users}" method="get">
+				<input type="text" name="keyword" placeholder="メールアドレスで検索" th:value="${keyword}">
+
+				<select name="membership">
+					<option value="" th:selected="${membership == null or membership == ''}">
+						すべて
+					</option>
+					<option value="premium" th:selected="${membership == 'premium'}">
+						有料会員
+					</option>
+					<option value="free" th:selected="${membership == 'free'}">
+						無料会員
+					</option>
+				</select>
+
+				<button type="submit">検索</button>
+			</form>
+
+			<p>
+				<a th:href="@{/admin/users}">検索条件をリセット</a>
+			</p>
+
+			<table class="admin-table">
+				<thread>
+				<tr>
+					<th>ID</th>
+					<th>メールアドレス</th>
+					<th>会員種別</th>
+					<th>有効/無効</th>
+					<th>有料/無料</th>
+					<th>有効期限</th>
+					<th>解約予定</th>
+					<th>操作</th>
+				</tr>
+				</thread>
+				<tr th:each="user : ${users}">
+					<td th:text="${user.id}"></td>
+					<td th:text="${user.email}"></td>
+					<td th:text="${user.role}"></td>
+					<td th:text="${user.enabled ? '有効' : '無効'}"></td>
+					<td th:text="${user.premium ? '有料' : '無料'}"
+						th:style="${user.premium} ? 'color:blue' : 'color:gray'">
+					</td>
+					<td
+						th:text="${user.premiumValidUntil != null and !T(java.time.LocalDate).now().isAfter(user.premiumValidUntil) ? user.premiumValidUntil : '---'}">
+					</td>
+					<td th:text="${user.cancelAtPeriodEnd ? '解約予定（期限まで有効）' : '---'}"></td>
+					<td>
+						<!-- 自分自身にはボタンを出さない -->
+						<form th:if="${user.email != #authentication.name}"
+							th:action="@{/admin/users/toggle/{id}(id=${user.id})}" method="post">
+							<button type="submit" th:text="${user.enabled ? '無効化' : '有効化'}">
+							</button>
+						</form>
+
+						<span th:if="${user.email == #authentication.name}">
+							（自分）
+						</span>
+
+						<!-- 無料会員の場合のみアップグレードボタン表示 -->
+						<form th:if="${user.role == 'ROLE_USER' and !user.premium}"
+							th:action="@{/admin/users/upgrade/{id}(id=${user.id})}" method="post">
+							<button type="submit">有料化</button>
+						</form>
+
+						<span th:if="${user.role != 'ROLE_USER' or user.premium}">---</span>
+					</td>
+				</tr>
+			</table>
+	</body>
+	</head>
+
+	</html>

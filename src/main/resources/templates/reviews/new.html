@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>レビュー投稿</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+	<div th:replace="fragments/header :: header"></div>
+	<section class="review-container">
+		<section class="review-card">
+			<h1>レビュー投稿</h1>
+
+			<form th:action="@{/reviews/{shopId}(shopId=${shopId})}" th:object="${reviewForm}" method="post">
+
+				<div class="star-rating" id="starRating">
+
+					<span data-value="1">★</span>
+					<span data-value="2">★</span>
+					<span data-value="3">★</span>
+					<span data-value="4">★</span>
+					<span data-value="5">★</span>
+				</div>
+
+				<input type="hidden" th:field="*{score}" id="scoreInput">
+
+				<div>
+					<label>コメント:</label>
+					<textarea name="comment" rows="5" cols="40" required></textarea>
+				</div>
+
+				<button type="submit">投稿</button>
+			</form>
+		</section>
+
+		<div th:if="${param.reviewSuccess}" class="success-message">
+			レビュー投稿しました
+		</div>
+
+		<p><a th:href="@{/shops/{id}(id=${shopId})}">店舗詳細へ戻る</a></p>
+	</section>
+	<script>
+		const stars = document.querySelectorAll("#starRating span");
+		const scoreInput = document.getElementById("scoreInput");
+
+		stars.forEach(star => {
+			star.addEventListener("click", () => {
+				const value = star.getAttribute("data-value");
+
+				scoreInput.value = value;
+
+				stars.forEach(s => {
+					s.classList.remove("active");
+				});
+
+				for (let i = 0; i < value; i++) {
+					stars[i].classList.add("active");
+				}
+			});
+		});
+	</script>
+
+</body>
+
+</html>

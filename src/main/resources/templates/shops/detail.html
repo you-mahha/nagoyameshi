@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title th:text="${shop.name}">店舗詳細</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+	<div th:if="${param.reservationSuccess}"
+     class="success-message">
+    予約しました
+</div>
+	<div th:if="${param.favoriteAdded}"
+     class="success-message">
+    お気に入りに登録しました
+</div>
+
+<div th:if="${param.favoriteDeleted}"
+     class="success-message">
+    お気に入りを解除しました
+</div>
+<div th:if="${param.reviewAlreadyExists}" class="error-message">
+    この店舗にはすでにレビューを投稿しています。
+</div>
+	<div th:replace="fragments/header :: header"></div>
+	<h1 th:text="${shop.name}"></h1>
+		<div th:if="${param.reviewSuccess}" class="success-message">
+			レビューを投稿しました
+		</div>
+	<div class="shop-detail-container">
+		<img th:src="${shop.imageUrl != null and shop.imageUrl != '' ? shop.imageUrl : '/images/noimage.png'}"
+			alt="店舗画像" class="shop-detail-image">
+		<div class="shop-info">
+		</div>
+		<p>住所: <span th:text="${shop.address}"></span></p>
+		<p>カテゴリ: <span th:text="${shop.category != null ? shop.category.name : '未設定'}"></span></p>
+
+		<div class="review-sort">
+			<a th:href="@{/shops/{id}(id=${shop.id})}" th:classappend="${sort == null} ? 'active-sort' : ''">
+				新着順
+			</a>
+			|
+			<a th:href="@{/shops/{id}(id=${shop.id}, sort='score')}"
+				th:classappend="${sort == 'score'} ? 'active-sort' : ''">
+				高評価順
+			</a>
+		</div>
+	</div>
+
+	<h2>レビュー一覧</h2>
+	<ul>
+		<li th:if="${#lists.isEmpty(reviews)}">
+			まだレビューはありません
+		</li>
+
+		<li th:each="review : ${reviews}" class="review-item">
+
+			<div class="review-user" th:text="${review.user.email}"></div>
+
+			<div class="review-stars">
+				<span th:each="i : ${#numbers.sequence(1,5)}">
+					<span th:class="${review.score >= i} ? 'star filled' : 'star'">★</span>
+				</span>
+			</div>
+
+			<div class="review-comment" th:text="${review.comment}"></div>
+
+			<!-- レビューの日時表示 -->
+			<div class="review-date" th:text="${#temporals.format(review.createdAt, 'yyyy/MM/dd HH:mm')}">
+			</div>
+
+			<!-- 自分のレビューだけ削除表示 -->
+			<div th:if="${#authentication.name == review.user.email}">
+				<form th:action="@{/reviews/delete/{id}(id=${review.id})}" method="post">
+
+					<!-- 他ユーザーは非表示 -->
+					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+					<button type="submit">削除</button>
+				</form>
+			</div>
+
+		</li>
+
+	</ul>
+	<div class="average-rating">
+		<span class="average-label">平均評価：</span>
+		<div class="star-rating-display" th:data-score="${averageScore}">
+			<span>★</span>
+			<span>★</span>
+			<span>★</span>
+			<span>★</span>
+			<span>★</span>
+		</div>
+
+		<span class="average-score" th:text="${averageScore}"></span>
+
+		<span class="average-count">
+			（<span th:text="${reviewCount}"></span>件）
+		</span>
+	</div>
+
+	<hr>
+
+	<!-- 未ログイン -->
+	<div class="action-area" th:if="${user == null}">
+		<p>レビュー投稿・予約にはログインが必要です。</p>
+		<a th:href="@{/login(redirectUrl=${'/shops/' + shop.id})}">
+			<button type="button">ログインする</button>
+		</a>
+	</div>
+
+	<!-- 無料会員 -->
+	<div class="action-area" th:if="${user != null and !user.isPremium()}">
+		<p>レビュー投稿・予約は有料会員限定です。</p>
+		<form th:action="@{/payment/checkout}" method="post">
+			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+			<button type="submit">有料会員になる</button>
+		</form>
+	</div>
+
+	<!-- 有料会員 -->
+	<div class="action-area" th:if="${user != null and user.isPremium()}">
+		<p>
+			<a th:href="@{/reviews/new/{shopId}(shopId=${shop.id})}">
+				<button type="button">レビューを投稿する</button>
+			</a>
+		</p>
+		<p>
+			<a th:href="@{/reservations/new/{shopId}(shopId=${shop.id})}">
+				<button type="button">この店舗を予約する</button>
+			</a>
+		</p>
+
+		<form th:if="${!isFavorite}" th:action="@{/favorites/{shopId}(shopId=${shop.id})}" method="post">
+			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+			<button type="submit">お気に入り登録</button>
+		</form>
+
+		<form th:if="${isFavorite}" th:action="@{/favorites/{shopId}/delete(shopId=${shop.id})}" method="post">
+			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+			<button type="submit">お気に入り解除</button>
+		</form>
+
+	</div>
+	<p><a th:href="@{/shops}">店舗一覧へ戻る</a></p>
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+
+			const ratingDisplay = document.querySelector(".star-rating-display");
+
+			if (ratingDisplay) {
+				const score = parseFloat(ratingDisplay.dataset.score);
+
+				if (!isNaN(score)) {
+					const stars = ratingDisplay.querySelectorAll("span");
+
+					stars.forEach((star, index) => {
+						if (index < Math.floor(score)) {
+							star.classList.add("active");
+						}
+					});
+				}
+			}
+
+		});
+	</script>
+	<div class="pagination" th:if="${reviewPage.totalPages > 0}">
+
+		<!-- 前へ -->
+		<a th:if="${reviewPage.hasPrevious()}" th:href="@{/shops/{id}(id=${shop.id},
+                page=${reviewPage.number - 1},
+                sort=${sort})}">
+			← 前へ
+		</a>
+
+		<!-- ページ番号 -->
+		<span th:if="${reviewPage.totalPages > 0}" th:each="i : ${#numbers.sequence(0, reviewPage.totalPages - 1)}">
+			<a th:href="@{/shops/{id}(id=${shop.id}, page=${i}, sort=${sort})}" th:text="${i + 1}"
+				th:classappend="${i == reviewPage.number} ? 'active-page'">
+			</a>
+		</span>
+
+		<!-- 次へ -->
+		<a th:if="${reviewPage.hasNext()}" th:href="@{/shops/{id}(id=${shop.id},
+                page=${reviewPage.number + 1},
+                sort=${sort})}">
+			次へ →
+		</a>
+
+	</div>
+
+</body>
+
+</html>

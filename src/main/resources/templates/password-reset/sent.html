@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>再設定リンク発行</title>
+	</head>
+	<body>
+		<h1>再設定リンクを発行しました。</h1>
+		
+		<p>開発用：以下のリンクからパスワードを再設定してください。</p>
+		
+		<a th:href="${resetUrl}" th:text="${resetUrl}"></a>
+	</body>
+</html>

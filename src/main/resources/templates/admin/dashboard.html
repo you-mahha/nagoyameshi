@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+
+<head>
+	<meta charset="UTF-8">
+	<title>管理者ダッシュボード</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body><div th:replace="fragments/header :: header"></div>
+<div class="admin-container">
+	<h1>管理者ダッシュボード</h1>
+<p class="admin-login-user">
+    ログイン中：
+    <strong sec:authentication="name"></strong>
+    <span sec:authorize="hasRole('ADMIN')">（管理者）</span>
+</p>
+
+<div class="admin-menu">
+	<a th:href="@{/admin/shops}" class="admin-card">店舗管理</a>
+	<a th:href="@{/admin/users}" class="admin-card">ユーザー管理</a>
+	<a th:href="@{/admin/categories}" class="admin-card">カテゴリ管理</a>
+</div>
+</div>
+</body>
+
+</html>

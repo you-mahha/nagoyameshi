@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>店舗一覧</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+	<div th:replace="fragments/header :: header"></div>
+	<div class="shop-list-container">
+		<h1>店舗一覧</h1>
+		<form th:action="@{/shops}" method="get" class="shop-search-form">
+			<input type="text" name="keyword" placeholder="店舗名で検索" th:value="${keyword}">
+
+			<select name="categoryId">
+				<option value="">すべてのカテゴリ</option>
+				<option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"
+					th:selected="${category.id == categoryId}">
+				</option>
+			</select>
+
+			<select name="sort">
+				<option value="" th:selected="${sort == null or sort == ''}">新着順</option>
+				<option value="name" th:selected="${sort == 'name'}">店舗名順</option>
+				<option value="category" th:selected="${sort == 'category'}">カテゴリ順</option>
+				<option value="rating" th:selected="${sort == 'rating'}">評価が高い順</option>
+			</select>
+
+			<button type="submit">検索</button>
+		</form>
+
+		<p>
+			<a th:href="@{/shops}">検索条件をリセット</a>
+		</p>
+		<div class="shop-card-list">
+			<a th:each="shop :${shops}" th:href="@{/shops/{id}(id=${shop.id})}" class="shop-card-link"> <!-- 店舗詳細移動 -->
+				<div class="shop-card">
+					<img th:src="${shop.imageUrl != null and shop.imageUrl != '' ? shop.imageUrl : '/images/noimage.png'}"
+						alt="店舗画像" class="shop-card-image">
+					<div class="shop-card-body">
+						 <h3 th:text="${shop.name}"></h3>
+
+						<p>
+							カテゴリ：
+							<span th:text="${shop.category != null ? shop.category.name : '未設定'}"></span>
+						</p>
+					</div>
+				</div>
+			</a>
+		</div>
+
+		<p th:if="${#lists.isEmpty(shops)}"> <!-- 検索結果が0件の時 -->
+			該当する店舗がありません
+		</p>
+
+		<div class="pagination" th:if="${shopPage.totalPages > 1}">
+
+			<!-- 最初 -->
+			<a th:if="${shopPage.number > 0}"
+				th:href="@{/shops(page=0, keyword=${keyword}, categoryId=${categoryId}, sort=${sort})}">
+				&lt;&lt;
+			</a>
+
+			<!-- 前へ -->
+			<a th:if="${shopPage.hasPrevious()}"
+				th:href="@{/shops(page=${shopPage.number - 1}, keyword=${keyword}, categoryId=${categoryId}, sort=${sort})}">
+				&lt;
+			</a>
+
+			<!-- ページ番号 -->
+			<span th:each="i : ${#numbers.sequence(
+            T(java.lang.Math).max(0, shopPage.number - 2),
+            T(java.lang.Math).min(shopPage.totalPages - 1, shopPage.number + 2))}">
+
+				<a th:href="@{/shops(page=${i}, keyword=${keyword}, categoryId=${categoryId}, sort=${sort})}"
+					th:text="${i + 1}" th:classappend="${i == shopPage.number} ? ' active-page' : ''">
+				</a>
+
+			</span>
+
+			<!-- 次へ -->
+			<a th:if="${shopPage.hasNext()}"
+				th:href="@{/shops(page=${shopPage.number + 1}, keyword=${keyword}, categoryId=${categoryId}, sort=${sort})}">
+				&gt;
+			</a>
+
+			<!-- 最後 -->
+			<a th:if="${shopPage.number < shopPage.totalPages - 1}"
+				th:href="@{/shops(page=${shopPage.totalPages - 1}, keyword=${keyword}, categoryId=${categoryId}, sort=${sort})}">
+				&gt;&gt;
+			</a>
+		</div>
+	</div>
+</body>
+
+</html>

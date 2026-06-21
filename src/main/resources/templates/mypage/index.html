@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<meta charset="UTF-8">
+	<title>マイページ</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+	<div th:if="${param.profileUpdated}" class="success-message">
+		会員情報を更新しました
+	</div>
+	<div th:if="${param.premiumSuccess}" class="success-message">
+		有料会員になりました
+	</div>
+	<div th:if="${param.premiumCancel}" class="success-message">
+		解約予定に変更しました
+	</div>
+
+	<div th:replace="fragments/header :: header"></div>
+
+	<div class="mypage-container">
+		<h1>マイページ</h1>
+		<div th:if="${param.reviewDeleted}" class="success-message">
+			レビューを削除しました
+		</div>
+		<section class="mypage-card">
+
+			<h2>ユーザー情報</h2>
+			<p>名前：<span th:text="${user.name}"></span></p>
+			<p>メール：<span th:text="${user.email}"></span></p>
+
+			<p>
+				会員ステータス：
+				<span
+					th:text="${user.premiumValidUntil != null and !T(java.time.LocalDate).now().isAfter(user.premiumValidUntil) ? '有料会員' : '無料会員'}"></span>
+			</p>
+
+			<p th:if="${user.premiumValidUntil != null
+    and !T(java.time.LocalDate).now().isAfter(user.premiumValidUntil)}">
+				有料期限：<span th:text="${user.premiumValidUntil}"></span>
+			</p>
+
+			<p th:if="${user.cancelAtPeriodEnd 
+       and user.premiumValidUntil != null 
+       and !T(java.time.LocalDate).now().isAfter(user.premiumValidUntil)}">
+				解約予定です。期限までは利用できます。
+			</p>
+			<a th:href="@{/mypage/edit}" class="btn">会員情報を編集する</a>
+
+			<br>
+			<a th:href="@{/reservations}" class="btn">予約一覧を見る</a>
+
+			<form th:if="${user.premiumValidUntil != null 
+          and !T(java.time.LocalDate).now().isAfter(user.premiumValidUntil)}" th:action="@{/payment/portal}"
+				method="post">
+
+				<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+				<button type="submit">支払い方法を変更する</button>
+			</form>
+
+
+			<!-- 有料会員になるボタン追加(無料会員の時のみ表示) -->
+			<form
+				th:if="${user.premiumValidUntil == null or T(java.time.LocalDate).now().isAfter(user.premiumValidUntil)}"
+				th:action="@{/payment/checkout}" method="post">
+				<button type="submit">有料会員になる</button>
+			</form>
+
+			<!-- 有料会員のみ表示 -->
+			<form th:if="${user.premiumValidUntil != null 
+          and !T(java.time.LocalDate).now().isAfter(user.premiumValidUntil)
+          and !user.cancelAtPeriodEnd}" th:action="@{/cancel}" method="post">
+				<button type="submit">解約する</button>
+			</form>
+		</section>
+
+		<section class="mypage-card">
+			<h2>自分のレビュー</h2>
+
+			<div th:if="${#lists.isEmpty(reviews)}">
+				レビューはまだありません
+			</div>
+
+			<div class="mypage-review-list" th:if="${!#lists.isEmpty(reviews)}">
+				<div class="mypage-review-card" th:each="review : ${reviews}">
+					<h3>
+						<a th:href="@{/shops/{id}(id=${review.shop.id})}" th:text="${review.shop.name}">
+						</a>
+					</h3>
+
+					<p>
+						評価：
+						<span th:each="i : ${#numbers.sequence(1,5)}">
+							<span th:class="${review.score >= i} ? 'star filled' : 'star'">★</span>
+						</span>
+					</p>
+
+					<p>
+						コメント：
+						<span th:text="${review.comment}"></span>
+					</p>
+
+					<form th:action="@{/reviews/delete/{id}(id=${review.id})}" method="post">
+						<button type="submit" class="btn-danger btn-small">削除</button>
+					</form>
+				</div>
+			</div>
+			<hr>
+		</section>
+
+		<section class="mypage-card">
+			<h2>お気に入り店舗</h2>
+
+			<div th:if="${#lists.isEmpty(favorites)}">
+				お気に入り店舗はまだありません
+			</div>
+
+			<div class="favorite-card-list" th:if="${!#lists.isEmpty(favorites)}">
+				<div class="favorite-card" th:each="favorite : ${favorites}">
+					<a th:href="@{/shops/{id}(id=${favorite.shop.id})}" class="favorite-card-link">
+						<img th:src="${favorite.shop.imageUrl != null and favorite.shop.imageUrl != '' ? favorite.shop.imageUrl : '/images/noimage.png'}"
+							alt="店舗画像" class="favorite-card-image">
+
+
+						<div class="favorite-card-body">
+							<h3 th:text="${favorite.shop.name}"></h3>
+
+
+							<p>
+								カテゴリ：
+								<span
+									th:text="${favorite.shop.category != null ? favorite.shop.category.name : '未設定'}"></span>
+							</p>
+
+							<p>
+								住所：
+								<span th:text="${favorite.shop.address}"></span>
+							</p>
+						</div>
+					</a>
+					<div class="favorite-card-actions">
+						<form th:action="@{/favorites/{shopId}/delete/mypage(shopId=${favorite.shop.id})}"
+							method="post">
+							<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+							<button type="submit">お気に入り解除</button>
+						</form>
+					</div>
+				</div>
+			</div>
+	</div>
+	</section>
+	</div>
+</body>
+
+</html>

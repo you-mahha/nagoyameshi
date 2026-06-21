@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="adminHeader">
+    <hr>
+    <nav>
+        <a th:href="@{/admin}">🏠 管理者ダッシュボード</a> |
+        <a th:href="@{/admin/categories}">カテゴリー管理</a> |
+        <a th:href="@{/admin/users}">ユーザー管理</a> |
+        <a th:href="@{/admin/shops}">店舗管理</a>
+    </nav>
+    <hr>
+</div>
+
+</body>
+</html>

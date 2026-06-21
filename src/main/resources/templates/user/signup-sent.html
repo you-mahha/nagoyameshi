@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>メール認証</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+    <div class="signup-container">
+        <h1>メール認証</h1>
+
+        <p>会員登録を受け付けました。</p>
+        <p>以下のリンクをクリックして、メール認証を完了してください。</p>
+
+        <p th:if="${errorMessage}" class="error-message"
+           th:text="${errorMessage}">
+        </p>
+
+        <a th:if="${verificationUrl}"
+           th:href="${verificationUrl}"
+           th:text="${verificationUrl}">
+        </a>
+    </div>
+</body>
+
+</html>

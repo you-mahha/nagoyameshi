@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>管理者用 店舗一覧</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+	<div th:replace="fragments/header :: header"></div>
+
+	<div class="admin-container">
+		<h1>管理者用 店舗一覧</h1>
+		<form th:action="@{/admin/shops}" method="get" class="admin-searvh-form">
+			<input type="text" name="keyword" placeholder="店舗名で検索" th:value="${keyword}">
+			<select name="categoryId">
+				<option value="">すべてのカテゴリ</option>
+				<option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"
+					th:selected="${category.id == categoryId}">
+				</option>
+			</select>
+
+			<button type="submit">検索</button>
+		</form>
+
+		<p>
+			<a th:href="@{/admin/shops}">検索条件をリセット</a>
+		</p>
+			<a th:href="@{/admin/shops/new}" class="btn">＋ 新規作成</a>
+	
+		
+		<table class="admin-table">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>店舗名</th>
+					<th>カテゴリ</th>
+					<th>住所</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="shop : ${shops}">
+					<td th:text="${shop.id}"></td>
+					<td th:text="${shop.name}"></td>
+					<td th:text="${shop.category != null ? shop.category.name : '未設定'}"></td>
+					<td th:text="${shop.address}"></td>
+					<td>
+						<div class="admin-actions">
+							<a th:href="@{/admin/shops/{id}/edit(id=${shop.id})}">編集</a>
+
+							<form th:action="@{/admin/shops/{id}/delete(id=${shop.id})}" method="post"
+								style="display:inline" onsubmit="return confirm('本当に削除しますか？');">
+								<button type="submit" class="btn-danger btn-small">削除</button>
+							</form>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+
+</html>

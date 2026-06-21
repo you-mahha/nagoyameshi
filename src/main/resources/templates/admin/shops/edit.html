@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<meta charset="UTF-8">
+	<title>店舗情報編集</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+	<div th:replace="fragments/header :: header"></div>
+	<div class="admin-container">
+		<section class="mypage-card">
+			<h1>店舗情報編集</h1>
+
+			<form th:action="@{/admin/shops/{id}(id=${shop.id})}" method="post" enctype="multipart/form-data">
+				<!-- 画像ファイルを送る処理 -->
+
+				<div>
+					<label>店舗名:</label>
+					<input type="text" name="name" th:value="${shop.name}" required>
+				</div>
+
+				<div>
+					<label>住所:</label>
+					<input type="text" name="address" th:value="${shop.address}" required>
+				</div>
+
+				<div>
+					<label>カテゴリー:</label>
+					<select name="categoryId">
+						<option value="" th:selected="${shop.category == null}">
+							未設定
+						</option>
+
+						<option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}"
+							th:selected="${shop.category != null and cat.id == shop.category.id}">
+						</option>
+					</select>
+					<input type="file" name="imageFile"> <!-- 画像追加 -->
+
+				</div>
+
+				<button type="submit">更新</button>
+			</form>
+		</section>
+	</div>
+
+</body>
+
+</html>

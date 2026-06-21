@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>有料会員へのアップグレード</title>
+</head>
+<body>
+<h1>有料会員機能を使うにはアップグレードが必要です</h1>
+<p>有料会員になると以下の機能が利用できます：</p>
+<ul>
+    <li>お店の予約</li>
+    <li>レビュー投稿</li>
+    <li>クレジットカード登録・管理</li>
+    <li>有料会員の解約</li>
+</ul>
+
+<form th:action="@{/user/upgrade}" method="post">
+	
+	<input type="hidden"
+	th:name="${_csrf.parameterName}"
+	th:value="${_csrf.token}" />
+	
+    <button type="submit">有料会員にアップグレード</button>
+</form>
+
+<hr>
+
+<form th:action="@{/user/cancel}" method="post">
+	
+	<input type="hidden"
+	th:name="${_csrf.parameterName}"
+	th:value="${_csrf.token}" />
+	
+	<button type="submit">有料会員を解約する</button>
+</form>
+
+<p><a th:href="@{/user/shops}">店舗一覧に戻る</a></p>
+</body>
+</html>

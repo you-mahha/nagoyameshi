@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <title>NAGOYAMESHI</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+    <div th:replace="fragments/header :: header"></div>
+
+    <div class="mypage-container">
+        <section class="mypage-card">
+            <h1>ナゴヤメシへようこそ</h1>
+
+            <p>名古屋の飲食店を検索・予約できるサービスです。</p>
+
+            <a th:href="@{/shops}" class="btn">店舗一覧を見る</a>
+        </section>
+    </div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>会員情報編集</title>
+</head>
+<body>
+    <h1>会員情報編集</h1>
+<p th:if="${errorMessage}" th:text="${errorMessage}" style="color:red;"></p>
+
+    <form th:action="@{/mypage/edit}" th:object="${userEditForm}" method="post">
+        <div>
+            <label>名前</label>
+            <input type="text" th:field="*{name}">
+            <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+        </div>
+
+        <div>
+            <label>メールアドレス</label>
+            <input type="email" th:field="*{email}">
+            <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+        </div>
+
+        <button type="submit">更新する</button>
+    </form>
+
+    <p>
+        <a th:href="@{/mypage}">マイページに戻る</a>
+    </p>
+</body>
+</html>

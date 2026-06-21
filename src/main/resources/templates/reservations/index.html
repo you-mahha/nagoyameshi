@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>予約一覧</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}"> <!-- cssデータ反映 -->
+</head>
+
+<body>
+	<div th:if="${param.reservationDeleted}" class="success-message">
+    予約をキャンセルしました
+</div>
+<div th:replace="fragments/header :: header"></div>
+
+	<h1>予約一覧</h1>
+
+	<div th:if="${#lists.isEmpty(reservations)}">
+		<div class="empty-message">
+		予約はまだありません。
+		</div>
+	</div>
+
+	<ul th:if="${!#lists.isEmpty(reservations)}">
+		<li th:each="reservation : ${reservations}">
+			<p>店舗名：<span th:text="${reservation.shop.name}"></span></p>
+			<p>予約日：<span th:text="${reservation.reservedDate}"></span></p>
+			<p>予約時間：<span th:text="${reservation.reservedTime}"></span></p>
+			<p>人数：<span th:text="${reservation.numberOfPeople}"></span>人</p>
+
+         <!-- 過去の予約でキャンセルボタン非表示 -->
+			<form th:if="${reservation.reservedDate.isAfter(T(java.time.LocalDate).now())}"
+      th:action="@{/reservations/delete/{id}(id=${reservation.id})}" method="post">
+    <button type="submit">キャンセル</button>
+</form>
+			<hr>
+		</li>
+	</ul>
+
+	<p>
+		<a th:href="@{/mypage}">マイページに戻る</a>
+	</p>
+</body>
+
+</html>

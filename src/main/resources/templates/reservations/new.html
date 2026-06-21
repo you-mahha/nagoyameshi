@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>予約フォーム</title>
+</head>
+<body>
+
+<h1>予約フォーム</h1>
+
+<form th:action="@{/reservations/{shopId}(shopId=${shopId})}" method="post">
+    <input type="hidden" name="shopId" th:value="${shopId}">
+    
+    <div>
+        <label>人数:</label> <!-- 1人以上 -->
+        <input type="number" name="numPeople" min="1" max="10" required>
+    </div>
+    
+    <div>
+        <label>日時:</label>
+        <input type="datetime-local" name="reservationDate" required
+        th:min="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd''T''HH:mm')}">
+    </div>
+<p th:if="${error}" th:text="${error}" style="color:red;"></p>
+    <button type="submit">予約する</button>
+</form>
+
+<p><a th:href="@{/shops/{id}(id=${shopId})}">店舗詳細へ戻る</a></p>
+
+</body>
+</html>

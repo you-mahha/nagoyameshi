@@ -1,0 +1,673 @@
+@charset "UTF-8";
+
+.star {
+	font-size: 20px;
+	color: #ccc;
+	/* 未評価（☆） */
+}
+
+.star.filled {
+	color: gold;
+	/* 評価済み（★） */
+}
+
+.star-rating {
+
+	font-size: 2rem;
+}
+
+.star-rating span {
+	cursor: pointer;
+	color: #ccc;
+}
+
+.star-rating .active {
+	color: gold;
+}
+
+.star-rating input {
+	display: none;
+}
+
+.star-rating label {
+	color: #ccc;
+	cursor: pointer;
+}
+
+.star-rating input:checked~label {
+	color: #ccc;
+}
+
+.star-rating input:checked+label,
+.star-rating input:checked+label~label {
+	color: gold;
+}
+
+.star-rating-display {
+	font-size: 2rem;
+	display: inline-block;
+}
+
+.star-rating-display span {
+	color: #ccc;
+}
+
+.star-rating-display .active {
+	color: gold;
+}
+
+.review-date {
+	font-size: 0.9rem;
+	color: gray;
+	margin-top: 5px;
+}
+
+.review-item {
+	list-style: none;
+	background: #ffffff;
+	padding: 20px;
+	margin-bottom: 25px;
+	border-radius: 12px;
+	box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.review-item:hover {
+	transform: translateY(-3px);
+	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+}
+
+body {
+	background-color: #f5f6f8;
+}
+
+h1,
+h2,
+p,
+ul,
+.average-rating,
+.pagination {
+	max-width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.review-stars .star {
+	font-size: 1.2rem;
+}
+
+.review-date {
+	/* 右寄せ */
+	text-align: right;
+	font-size: 0.8rem;
+	color: gray;
+}
+
+
+.review-user {
+	font-weight: bold;
+	font-size: 1rem;
+	margin-bottom: 5px;
+}
+
+.review-stars {
+	margin-bottom: 5px;
+}
+
+.review-comment {
+	margin-bottom: 5px;
+}
+
+.review-sort {
+	margin-bottom: 15px;
+	font-weight: bold;
+	margin: 16px 0;
+	text-align: left;
+}
+
+.average-rating {
+	display: flex;
+	/* 横向き */
+	align-items: center;
+	gap: 10px;
+	margin-top: 20px;
+	padding: 10px 0;
+}
+
+.average-label {
+	font-weight: bold;
+}
+
+.average-score {
+	font-size: 1.2rem;
+	font-weight: bold;
+}
+
+.active-sort {
+	color: #ff9900;
+	font-weight: bold;
+}
+
+.pagination {
+	margin-top: 30px;
+	text-align: center;
+}
+
+.pagination a {
+	margin: 0 5px;
+	text-decoration: none;
+	padding: 6px 12px;
+	text-decoration: none;
+	border-radius: 6px;
+	border: 1px solid #ccc;
+	background: white;
+}
+
+.pagination a:hover {
+	background-color: #f0f0f0;
+}
+
+.active-page {
+	background-color: gold;
+	font-weight: bold;
+	color: red;
+	border: 1px solid gold;
+}
+
+.action-area {
+	text-align: center;
+	margin: 24px 0 12px;
+}
+
+.action-area button {
+	margin: 6px;
+}
+
+.shop-list-image {
+	width: 200px;
+	height: 150px;
+	object-fit: cover;
+	display: block;
+	margin-top: 8px;
+}
+
+.shop-detail-image {
+	width: 400px;
+	height: 250px;
+	object-fit: cover;
+	display: block;
+	margin: 16px 0;
+}
+
+.shop-list-container {
+	width: 700px;
+	margin: 0 auto;
+}
+
+.shop-search-form {
+	margin-bottom: 16px;
+}
+
+.shop-detail-container {
+	display: block;
+	max-width: 800px;
+	margin: 0 auto;
+}
+
+.shop-detail-container h1 {
+	margin-bottom: 16px;
+}
+
+hr {
+    max-width: 800px;
+    margin: 24px auto;
+}
+
+h1 {
+	margin-bottom: 20px;
+}
+
+button, .btn {
+	text-align: center;
+	min-width: 120px;
+	display: inline-block;
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: none;
+    background-color: #ff9900;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    text-decoration: none;
+    line-height: 1.2;
+}
+
+button:hover, .btn:hover {
+    opacity: 0.9;
+}
+
+.btn-secondary {
+	background-color: #666;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+}
+
+.btn-small {
+    padding: 6px 10px;
+    font-size: 12px;
+}
+
+.shop-info p {
+    font-size: 15px;
+    line-height: 1.8;
+}
+
+.shop-card-list {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 24px;
+	margin-top: 24px;
+}
+
+.shop-card {
+	background: #fff;
+	border-radius: 12px;
+	overflow: hidden;
+	box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+}
+
+.shop-card-image {
+	width: 100%;
+	height: 150px;
+	object-fit: cover;
+	display: block;
+}
+	
+.shop-card-body {
+	padding: 12px;
+}
+
+.shop-card-body h3 {
+	margin: 0 0 8px;
+	font-size: 16px;
+}
+
+.site-header {
+    background-color: #ffffff;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 24px;
+}
+
+.site-header-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.site-logo {
+    font-weight: bold;
+    font-size: 20px;
+    text-decoration: none;
+    color: #333;
+}
+
+.site-nav {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.site-nav a {
+    text-decoration: none;
+    color: #333;
+}
+
+.logout-form {
+    margin: 0;
+}
+
+.mypage-container {
+	max-width: 1000px;
+	margin: 0 auto;
+	padding: 24px 16px;
+}
+
+.mypage-container h1 {
+	margin-bottom: 30px;
+}
+
+.mypage-card {
+	background: #fff;
+	padding: 24px;
+	margin-bottom: 24px;
+	border-radius: 12px;
+	box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+}
+
+.mypage-card h2 {
+	margin-top: 0;
+	border-bottom: 1px solid #ddd;
+	padding-bottom: 8px;
+}
+
+.mypage-card ul {
+    padding-left: 20px;
+}
+
+.mypage-card li {
+	margin-bottom: 16px;
+}
+
+.mypage-card a {
+	color: #333;
+	font-weight: bold;
+}
+
+.mypage-card form {
+	margin-top: 8px;
+}
+
+.favorite-card-list {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 20px;
+	margin-top: 50px;
+}
+
+.favorite-card {
+	background: #fff;
+	border-radius: 12px;
+	box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+	overflow: hidden;
+}
+
+.favorite-card-image {
+	width: 100%;
+	height: 200px;
+	object-fit: cover;
+	display: block;
+}
+
+.favorite-card-body {
+	padding: 14px;
+}
+
+.favorite-card-body h3 {
+	margin: 0 0 8px;
+	font-size: 16px;
+}
+
+.favorite-card-link {
+	    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.favorite-card-actions {
+	padding: 0 14px 14px;
+}
+
+.mypage-review-list {
+	display: grid;
+	grid-template-columns: repeat(2, ifr);
+	gap: 20px;
+	margin-top: 16px;
+}
+
+.mypage-review-card {
+	background: #fff;
+	padding: 16px;
+	box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+}
+
+.mypage-review-vard form {
+	margin-top: 12px;
+}
+
+.mypage-card .btn,
+.mypage-card button {
+    margin: 4px 0;
+}
+
+.error-message {
+	text-align: center;
+     color:#721c24;
+    background:#f8d7da;
+    border:1px solid #f5c6cb;
+    padding:10px;
+    border-radius:6px;
+    margin-bottom:15px;
+}
+.success-message {
+	color: #155724;
+	background:#d4edda;
+	border:1px solid #c3e6cb;
+	padding: 10px;
+	border-radius: 6px;
+	text-align: center;
+	margin-bottom: 15px;
+}
+
+.delete-message {
+	color: #dc3545;
+	background:#f8d7da;
+	border:1px solid #f8d7da;;
+	padding: 10px;
+	border-radius: 6px;
+	text-align: center;
+	margin-bottom: 15px;
+}
+.login-container {
+    width: 400px;
+    margin: 80px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.login-container h1 {
+    text-align: center;
+}
+
+.login-container div {
+    margin-bottom: 15px;
+}
+
+.login-container input {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.login-container button, .btn {
+	width: 100%;
+}
+
+.login-container p {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.signup-container{
+    width:400px;
+    margin:80px auto;
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
+
+.signup-container h1{
+    text-align:center;
+}
+
+.signup-container div{
+    margin-bottom:15px;
+}
+
+.signup-container input{
+    width:100%;
+    padding:8px;
+    box-sizing:border-box;
+}
+
+.signup-container button{
+    width:100%;
+}
+
+.admin-container {
+    max-width: 900px;
+    margin: 60px auto;
+    padding: 0 20px;
+}
+
+.admin-container h1 {
+    margin-bottom: 20px;
+}
+
+.admin-login-user {
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.admin-menu {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.admin-card {
+    display: block;
+    background: white;
+    padding: 40px 20px;
+    border-radius: 12px;
+    text-align: center;
+    font-weight: bold;
+    color: #333;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+    color: #ff9900;
+}
+
+.admin-search-form {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.admin-search-form input,
+.admin-search-form select {
+    padding: 8px;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    margin-top: 20px;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.admin-table th {
+    background-color: #ff9900;
+    color: white;
+}
+
+.admin-table tr:hover {
+    background-color: #f9f9f9;
+}
+
+.admin-actions {
+    display: flex;
+    gap: 6px;
+    flex-direction: column;
+}
+
+.category-table th:first-child,
+.category-table td:first-child {
+    width: 80px;
+}
+
+.category-table th:last-child,
+.category-table td:last-child {
+    width: 220px;
+}
+
+.category-table td:last-child {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.admin-create-button {
+    display: block;
+    text-align: center;
+    margin: 20px 0;
+}
+
+header a {
+	white-space: nowrap;
+}
+
+.empty-message {
+	text-align: center;
+	margin: 40px 0;
+}
+
+.review-container {
+	max-width: 900px;
+    margin: 60px auto;
+    padding: 0 20px;
+}
+
+.review-container h1 {
+    margin-bottom: 20px;
+}
+
+.review-card {
+    display: block;
+    background: white;
+    padding: 40px 20px;
+    border-radius: 12px;
+    text-align: center;
+    font-weight: bold;
+    color: #333;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.review-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+    color: #ff9900;
+}
+
+.mypage-card input[type="text"],
+.mypage-card select {
+    padding: 6px;
+    min-width: 220px;
+}

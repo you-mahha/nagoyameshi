@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>有料会員ダッシュボード</title>
+</head>
+<body>
+
+<h1>有料会員ダッシュボード</h1>
+
+<ul>
+    <li><a th:href="@{/user/shops}">店舗一覧</a></li>
+    <li><a th:href="@{/user/premium/credit}">クレジットカード管理</a></li>
+    <li>
+        <form th:action="@{/user/premium/cancel}" method="post" 
+              onsubmit="return confirm('本当に解約しますか？');">
+            <button type="submit">有料会員を解約</button>
+        </form>
+    </li>
+</ul>
+
+</body>
+</html>

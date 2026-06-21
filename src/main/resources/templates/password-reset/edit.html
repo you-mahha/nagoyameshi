@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>新しいパスワード</title>
+	</head>
+	<body>
+		<h1>新しいパスワード設定</h1>
+		
+		<form th:action="@{/password-reset/update}" method="post">
+			<input type="hidden" name="token" th:value="${token}">
+			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+			
+			<label>新しいパスワード</label>
+			<input type="password" name="password" required>
+			
+			<button type="submit">更新する</button>
+		</form>
+	</body>
+</html>

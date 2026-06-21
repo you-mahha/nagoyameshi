@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>パスワード再設定</title>
+</head>
+<body>
+<h1>パスワード再設定</h1>
+
+<p th:if="${message}" th:text="${message}"></p>
+<p th:if="${error}" th:text="${error}" style="color:red;"></p>
+
+<form th:action="@{/password-reset}" method="post">
+    <label>メールアドレス</label>
+    <input type="email" name="email" required>
+    <button type="submit">再設定リンクを発行</button>
+</form>
+
+<a th:href="@{/login}">ログイン画面へ戻る</a>
+</body>
+</html>

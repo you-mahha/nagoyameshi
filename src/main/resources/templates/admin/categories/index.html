@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+
+
+<head>
+	<meta charset="UTF-8">
+	<title>カテゴリ一覧</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+	<div th:replace="fragments/header :: header"></div>
+	<div class="admin-container">
+	<h1>カテゴリ一覧</h1>
+<div th:if="${successMessage}"
+     class="success-message"
+     th:text="${successMessage}">
+</div>
+<div th:if="${errorMessage}"
+     class="error-message"
+     th:text="${errorMessage}">
+</div>
+	<!-- 新規作成ボタン -->
+	
+		<a th:href="@{/admin/categories/new}" class="btn">＋ 新規作成</a>
+
+
+	<table class="admin-table category-table">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>名前</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="cat : ${categories}">
+				<td th:text="${cat.id}"></td>
+				<td th:text="${cat.name}"></td>
+				<td>
+					<a th:href="@{/admin/categories/{id}/edit(id=${cat.id})}" class="btn-small">編集</a>
+					<form th:action="@{/admin/categories/{id}/delete(id=${cat.id})}" method="post"
+						style="display:inline" onsubmit="return confirm('本当に削除しますか？');">
+						<button type="submit" class="btn-danger btn-small">削除</button>
+					</form>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	</div>
+</body>
+
+</html>

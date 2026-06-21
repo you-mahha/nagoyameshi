@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+	<meta charset="UTF-8">
+	<title>新規店舗登録</title>
+	<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+	<div th:replace="fragments/header :: header"></div>
+	<div class="admin-container">
+		<section class="mypage-card">
+			<h1>新規店舗登録</h1>
+
+			<form th:action="@{/admin/shops/create}" th:object="${shop}" method="post" enctype="multipart/form-data">
+				<div>
+					<label for="name">店舗名:</label>
+					<input type="text" id="name" th:field="*{name}" placeholder="例：なごや食堂" required>
+				</div>
+
+				<div>
+					<label for="address">住所:</label>
+					<input type="text" id="address" th:field="*{address}" placeholder="例：名古屋市中区○○町" required>
+				</div>
+
+				<div>
+					<label for="category">カテゴリー:</label>
+					<select name="categoryId" id="category">
+						<option value="">-- カテゴリーを選択 --</option>
+						<option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}"></option>
+					</select>
+				</div>
+
+				<div>
+					<input type="file" name="imageFile"> <!-- 画像追加 -->
+					<button type="submit">登録</button>
+					<a th:href="@{/admin/shops}">キャンセル</a>
+				</div>
+			</form>
+		</section>
+	</div>
+
+</body>
+
+</html>
