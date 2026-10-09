@@ -45,7 +45,7 @@ public class WebhookController {
 
 		System.out.println("署名ヘッダー: " + sigHeader);
 
-		String endpointSecret = "whsec_c15659afecee3085d604a1c6857408b9d12271bece49e3dafbb5062c215e4e92"; // ←自分のに置き換え
+		String endpointSecret = System.getenv("STRIPE_WEBHOOK_SECRET"); // ←自分のに置き換え
 		Event event;
 
 		try {
