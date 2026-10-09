@@ -53,7 +53,7 @@ public class WebhookController {
 			System.out.println("イベントタイプ: " + event.getType());
 		} catch (Exception e) {
 			System.out.println("❌ 署名エラー: " + e.getMessage());
-			return ResponseEntity.ok("");
+			return ResponseEntity.badRequest().body("");
 		}
 		
 		// =========================
